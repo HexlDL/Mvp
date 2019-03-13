@@ -1,0 +1,190 @@
+<?xml version="1.0"?>
+<template
+        format="5"
+        revision="1"
+        name="Mvp"
+        description="第一个插件模板的诞生之路">
+
+    <category value="Activity"/>
+    <formfactor value="Mobile"/>
+
+    <!-- 公共名称 -->
+    <parameter
+            id="commonName"
+            name="Common Name"
+            type="string"
+            constraints="nonempty"
+            help="公共名称，作为所有页面的前缀"
+            default="Hexl"/>
+
+    <!-- Activity 创建相关代码 -->
+
+    <!-- 判断创建Activity -->
+    <parameter
+            id="needActivity"
+            name="是否创建Activity"
+            type="boolean"
+            default="true"/>
+
+    <!-- id 唯一值可以在recipe文件中获取到,
+        name 模板页面展示的名称
+        type 可以指定string boolean 等类型
+        constraints 类名的约束 class:类名首字母大写,
+                              nonempty:非空,必须填写
+                              unique:定义的类名不能重复
+        default 默认显示在页面上的值
+        help 提示语
+        visibility 是否显示
+        suggest 建议值,例如:输入类名时可以和布局名称进行联动
+    -->
+    <parameter
+            id="activityClass"
+            name="Activity Name"
+            type="string"
+            constraints="class|nonempty"
+            suggest="${commonName}Activity"
+            visibility="needActivity"
+            help="hexl 测试模板 Activity"/>
+
+    <!-- 根据是否创建Activity进行判断是否要生成布局文件的模板 -->
+    <parameter
+            id="needActivityLayout"
+            name="是否创建ActivityLayout"
+            type="boolean"
+            default="true"
+            help="hexl 测试模板 Layout"/>
+
+    <!-- 创建布局 -->
+    <parameter
+            id="layoutActivityClass"
+            name="Activity Layout"
+            constraints="layout|nonempty"
+            default="activity_main"
+            visibility="needActivityLayout"
+            suggest="${activityToLayout(activityClass)}"
+            help="hexl 测试模板 Layout"/>
+
+    <!-- Fragment 创建相关代码 -->
+
+    <!-- 判断创建Fragment -->
+    <parameter
+            id="needFragment"
+            name="是否创建Fragment"
+            type="boolean"
+            default="false"/>
+
+    <!-- 创建Fragment -->
+    <parameter
+            id="fragmentClass"
+            name="Fragment Name"
+            type="string"
+            constraints="class|nonempty"
+            suggest="${commonName}Fragment"
+            visibility="needFragment"
+            help="hexl 测试模板 Fragment"/>
+
+    <!-- 根据是否创建Fragment进行判断是否要生成布局文件的模板 -->
+    <parameter
+            id="needFragmentLayout"
+            name="是否创建FragmentLayout"
+            type="boolean"
+            default="false"
+            help="hexl 测试模板 Layout"/>
+
+    <!-- 创建布局
+        Fragment 布局名称联动与Activity 不一样,需要特别注意
+    -->
+    <parameter
+            id="layoutFragmentClass"
+            name="Fragment Layout"
+            visibility="needFragmentLayout"
+            constraints="layout|nonempty"
+            default="fragment_main"
+            suggest="fragment_${classToResource(fragmentClass)}"
+            help="hexl 测试模板 Layout"/>
+
+    <!-- 是否创建Presenter -->
+    <parameter id="needPresenter"
+               name="是否创建Presenter"
+               type="boolean"
+               default="true"
+               help="默认选中,创建Presenter"/>
+
+    <!-- 创建Presenter -->
+    <parameter
+            id="presenterClass"
+            name="Presenter Name"
+            type="string"
+            suggest="${commonName}Presenter"
+            constraints="class|nonempty"
+            visibility="needPresenter"
+            help="Presenter 将被输出到如下目录 mvp.presenter 下"/>
+
+    <!-- 是否创建Model -->
+    <parameter id="needModel"
+               name="是否创建Model"
+               type="boolean"
+               default="true"
+               help="默认选中,创建Model"/>
+
+    <!-- 创建Model -->
+    <parameter
+            id="modelClass"
+            name="Model Name"
+            type="string"
+            visibility="needModel"
+            constraints="class|nonempty"
+            suggest="${commonName}Presenter"
+            help="Model 将被输出到如下目录 mvp.model 下"/>
+
+    <!-- 是否创建Adapter -->
+    <parameter
+            id="needAdapter"
+            name="是否创建Adapter"
+            type="boolean"
+            default="true"/>
+
+    <parameter
+            id="adapterClass"
+            name="Adapter Name"
+            type="string"
+            suggest="${commonName}Adapter"
+            constraints="class|nonempty"
+            visibility="needAdapter"
+            help="Adapter 将被输出到 package.adapter 下"/>
+
+    <!-- 是否创建Adapter的Item布局 -->
+    <parameter
+            id="needAdapterLayout"
+            name="是否创建AdapterLayout"
+            type="boolean"
+            default="true"/>
+
+    <!--
+        adapter item 名称联动与fragment和activity都不一样
+        规范是 item_$小写adapterClass
+    -->
+    <parameter
+            id="adapterLayoutClass"
+            name="Adapter Layout Name"
+            type="string"
+            suggest="item_${extractLetters(commonName?lower_case)}"
+            constraints="class|nonempty"
+            visibility="needAdapterLayout"
+            help="AdapterLayout 布局文件将被输出到 res/layouts/items/ 下"/>
+
+
+    <!--
+        模板页面左侧的图片,一般用于展示模板生成后效果
+    -->
+    <thumbs>
+        <thumb>template_login_activity.png</thumb>
+    </thumbs>
+
+    <!--
+        引入两个文件
+    -->
+    <globals file="globals.xml.ftl"/>
+    <execute file="recipe.xml.ftl"/>
+
+</template>
